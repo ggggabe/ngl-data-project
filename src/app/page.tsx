@@ -1,27 +1,87 @@
-import { prisma } from '@/lib/prisma'
+'use client'
+import { useState, useEffect } from 'react'
+import { Container, Typography, Box, CircularProgress } from '@mui/material'
+import { BarChart } from '@mui/x-charts'
 
-export default async function Home() {
-  // Create a test record
-  const created = await prisma.test.create({
-    data: {
-      name: "Test Entry " + new Date().toISOString()
-    }
-  })
+export default function Home() {
+  const [data, setData] = useState<{state: string, avgRate: number}[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Fetch all records
-  const allTests = await prisma.test.findMany()
-  
+  useEffect(() => {
+    fetch('/api/rates')
+      .then(res => res.json())
+      .then(data => {
+        data.sort((a, b) => a.state.localeCompare(b.state))
+        setData(data)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Box display="flex" justifyContent="center" py={8}>
+          <CircularProgress />
+        </Box>
+      </Container>
+    )
+  }
+
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold">Data Project</h1>
-      <div className="mt-4">
-        <h2>Just Created:</h2>
-        <pre>{JSON.stringify(created, null, 2)}</pre>
-      </div>
-      <div className="mt-4">
-        <h2>All Records:</h2>
-        <pre>{JSON.stringify(allTests, null, 2)}</pre>
-      </div>
-    </main>
+    <Container maxWidth="lg">
+      <Box py={4}>
+        <Typography variant="h4" gutterBottom>
+          Healthcare Plan Cost Explorer
+        </Typography>
+        
+        <Box mt={4}>
+          <Typography variant="h6" gutterBottom>
+            Average Individual Rates by State
+          </Typography>
+          <BarChart
+            xAxis={[{ 
+              scaleType: 'band', 
+              data: data.map(d => d.state),
+              label: 'States'
+            }]}
+            height={400}
+            series={[{ 
+              data: data.map(d => d.avgRate),
+            }]}
+            slotProps={{
+              axisTick: {
+                style: {
+                  stroke: '#fff'
+                }
+              },
+              axisTickLabel: {
+                stroke: '#fff'
+              },
+              axisContent: {
+                sx: {
+                  color: '#fff',
+                  fill: '#fff',
+                  stroke: '#fff'
+                }
+              },
+              barLabel: {
+                style: {
+                  stroke: '#fff',
+                  fill: '#fff'
+                }
+              },
+              axisLabel: {
+                stroke: '#fff',
+                fill: '#fff'
+              },
+              axisLine: {
+                stroke: '#fff'
+              },
+ 
+            }}
+          />
+        </Box>
+      </Box>
+    </Container>
   )
 }

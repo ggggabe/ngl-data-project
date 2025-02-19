@@ -7,6 +7,13 @@
 3. Run `npm install`
 4. Run `npm run dev`
 
+## Data Processing
+
+1. Run `npm run process-rates` to process the rates data
+2. Run `npm run analyze-data` to analyze the data
+
+This process the raw files (./data/raw/rates, ./data/raw/attributes) into MongoDB.
+
 ## Database
 
 1. Run `npx prisma migrate dev`

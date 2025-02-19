@@ -17,3 +17,76 @@ model Test {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
 }
+
+model Rate {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  year                  Int
+  state                 String
+  planId               String
+  area                 String
+  tobacco              String?
+  individualRate       Float
+  individualTobaccoRate Float?
+  lineNumber           Int
+
+  @@index([year, state])
+  @@index([planId])
+  @@index([lineNumber])
+}
+
+model AttributePuf {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lineNumber Int
+
+  // Core Plan Info
+  year                    Int
+  state                   String
+  planId                  String
+  issuerId               String
+  issuerName             String    @map("IssuerMarketPlaceMarketingName")
+  standardComponentId     String
+  planMarketingName      String
+  hiosProductId          String    @map("HIOSProductId")
+
+  // Market & Coverage
+  marketCoverage         String    @map("MarketCoverage")
+  dentalOnlyPlan        String    @map("DentalOnlyPlan")
+  isNewPlan             String    @map("IsNewPlan")
+  planType              String    @map("PlanType")
+  metalLevel            String    @map("MetalLevel")
+  
+  // Network Info
+  networkId              String
+  serviceAreaId          String
+  nationalNetwork        String    @map("NationalNetwork")
+  outOfCountryCoverage   String    @map("OutOfCountryCoverage")
+  outOfServiceAreaCoverage String  @map("OutOfServiceAreaCoverage")
+
+  // Dates
+  planEffectiveDate      DateTime? @map("PlanEffectiveDate")
+  planExpirationDate     DateTime? @map("PlanExpirationDate")
+
+  // Cost Sharing
+  mehbCombInnOonIndividualMOOP    String?  @map("MEHBCombInnOonIndividualMOOP")
+  mehbCombInnOonFamilyPerPersonMOOP String? @map("MEHBCombInnOonFamilyPerPersonMOOP")
+  mehbCombInnOonFamilyPerGroupMOOP  String? @map("MEHBCombInnOonFamilyPerGroupMOOP")
+  mehbDedCombInnOonIndividual      String?  @map("MEHBDedCombInnOonIndividual")
+  mehbDedCombInnOonFamilyPerPerson String? @map("MEHBDedCombInnOonFamilyPerPerson")
+  mehbDedCombInnOonFamilyPerGroup  String? @map("MEHBDedCombInnOonFamilyPerGroup")
+
+  // Child Coverage
+  childOnlyOffering      String    @map("ChildOnlyOffering")
+  compositeRatingOffered String    @map("CompositeRatingOffered")
+
+  @@index([year, state])
+  @@index([planId])
+  @@index([issuerId])
+  @@index([standardComponentId])
+  @@index([lineNumber])
+  @@unique([year, planId], name: "year_plan_id")
+}
