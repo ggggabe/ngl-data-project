@@ -19,7 +19,7 @@ async function analyzeFiles() {
 async function analyzeFileContents(filePath: string) {
   const emptyFields: Record<string, number> = {}
   let totalRows = 0
-  let sampleRow: any = null
+  let sampleRow: Record<string, string> | null = null
 
   await new Promise((resolve) => {
     fs.createReadStream(filePath)

@@ -125,11 +125,6 @@ export default function Home() {
               axisLine: {
                 stroke: '#fff',
                 fill: '#fff'
-              },
-              legend: {
-                series: {
-                  stroke: '#fff'
-                }
               }
             }}
           />

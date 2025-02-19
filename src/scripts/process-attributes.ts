@@ -9,11 +9,13 @@ async function processAttributes() {
   
   console.log('Processing attributes...')
   const batchSize = 1000
+  // eslint-disable-next-line
   let batch: any[] = []
   let processedCount = 0
   let currentLine = 0
-  let failedLines: number[] = []
-  const promises: Promise<any>[] = []
+  const failedLines: number[] = []
+  // eslint-disable-next-line
+  const promises: Promise<any>[] = [] 
 
   await new Promise((resolve, reject) => {
     fs.createReadStream(path.join(attributesPath, files[0]))
